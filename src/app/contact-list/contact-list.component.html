@@ -1,0 +1,9 @@
+<ul class="nav nav-pills nav-stacked">
+  <li *ngFor="let contact of contacts" (click)="onSelect(contact)">
+    <a>
+      <img src="./../assets/contactList.jpg" />
+      <span id="XXX">{{contact.firstName}} {{contact.lastName}}</span>
+    </a>
+
+  </li>
+</ul>

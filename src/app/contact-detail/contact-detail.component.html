@@ -1,0 +1,41 @@
+<div>
+  <div class="col-md-4">
+    <img src="../../assets/contactList2.jpg" alt="...">
+  </div>
+  <form role="form">
+    <div *ngIf="editFirstName" class="form-group">
+      <input type="input" class="form-control" name="firstName" placeholder="Title" [(ngModel)]="contact.firstName">
+    </div>
+    <h3 *ngIf="!editFirstName" (click)="onTitleClick()">{{contact.firstName}}</h3>
+    <div *ngIf="editLastName" class="form-group">
+      <input type="input" class="form-control" name="lastName" placeholder="url" [(ngModel)]="contact.lastName">
+    </div>
+    <h3 *ngIf="!editLastName" (click)="onLastNameClick()">{{contact.lastName}}</h3>
+    <div class="form-group">
+      <input type="number" class="form-control" name="phoneNo" [(ngModel)]="contact.phoneNo">
+    </div>
+    <div class="form-group">
+      <input type="email" class="form-control" name="emailId" [(ngModel)]="contact.emailId">
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" name="addressLine1" [(ngModel)]="contact.addressLine1">
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" name="addressLine2" [(ngModel)]="contact.addressLine2">
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" name="city" [(ngModel)]="contact.city">
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" name="state" [(ngModel)]="contact.state">
+    </div>
+    <div class="form-group">
+      <input type="number" class="form-control" name="pincode" [(ngModel)]="contact.pincode">
+    </div>
+    <!-- <div class="form-group">
+      <input type="text" class="form-control" name="role" [(ngModel)]="contact.role">
+    </div> -->
+    <button type="button" (click)="updateContact()" class="btn btn-primary">Update</button>
+    <button type="button" (click)="deleteContact()" class="btn btn-danger">Delete</button>
+  </form>
+</div>

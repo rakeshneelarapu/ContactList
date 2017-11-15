@@ -1,0 +1,78 @@
+<div class="row">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <span class="navbar-brand" href="#">ContactList</span>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li> <a>Welcome User</a></li>
+          <li><a routerLink='/home'>Logout</a></li>
+        </ul>
+    </div>
+  </div>
+</nav>
+</div>
+<div class="row">
+  <div class="col-sm-3">
+    <button (click)="newContact()" class="btn btn-success btn-block" type="button">Add Contact</button>
+    <contact-list [contacts]="contacts" (SelectContact)="onSelectContact($event)"></contact-list>
+  </div>
+  <div class="col-sm-9">
+    <div *ngIf="!hideContact">
+      <h3>New Contact</h3>
+      <form #form="ngForm" (ngSubmit)="onSubmitAddContact(form.value)" class="well">
+        <div class="form-group">
+          <label>FirstName</label>
+          <input type="text" class="form-control" required name="firstName" ngModel>
+        </div>
+        <div class="form-group">
+          <label>LastName</label>
+          <input type="text" class="form-control" required name="lastName" ngModel>
+        </div>
+        <div class="form-group">
+          <label>PhoneNo</label>
+          <input type="number" class="form-control" required name="phoneNo" ngModel>
+        </div>
+        <div class="form-group">
+          <label>EmailId</label>
+          <input type="email" class="form-control" required name="emailId" ngModel>
+        </div>
+        <div class="form-group">
+          <label>Address Line 1</label>
+          <input type="text" class="form-control" required name="addressLine1" ngModel>
+        </div>
+        <div class="form-group">
+          <label>Address Line 2</label>
+          <input type="text" class="form-control" name="addressLine2" ngModel placeholder="Addr Line2">
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" class="form-control" required name="city" ngModel>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" class="form-control" required name="state" ngModel>
+        </div>
+        <div class="form-group">
+          <label>Pincode</label>
+          <input type="text" class="form-control" required name="pincode" ngModel>
+        </div>
+        <!-- <div class="form-group">
+          <label>Role</label>
+          <input type="text" class="form-control" required name="role" ngModel>
+        </div> -->
+        <button class="btn btn-success" type="submit">Save</button>
+        <button class="btn btn-danger" type="button" (click)="closeContactForm()">Cancel</button>
+      </form>
+    </div>
+    <contact-detail *ngIf="selectedContact && hideContact" [contact]="selectedContact" (updateContactEvent)="onUpdateContact($event)"
+      (deleteContactEvent)="onDeleteContactEvent($event)"></contact-detail>
+  </div>
+</div>
