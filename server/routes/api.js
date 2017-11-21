@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const getContacts = require('../models/contactList');
 const db = "mongodb://localhost:27017/contactListManagement";
 mongoose.Promise = global.Promise;
@@ -11,6 +12,34 @@ mongoose.connect(db, (err) => {
   }
 });
 
+/*0. METHOD TO AUTHENTICATE THE USER */
+router.post('/authenticate', function (req, response) {
+  getContacts.findOne({
+    userName: req.body.userName
+  }, function (err, user) {
+    if (err) {
+      console.log(err);
+    }
+    if (!req.body.role === 'admin') {
+      if (!user.validPassword(req.body.password)) {
+        console.log('Password Did not Match');
+        response.status(400).send('UserName or password is incorrect');
+      } else {
+        console.log('Password Matched');
+        response.json(user);
+      }
+    } else {
+      if (user.password === req.body.password) {
+        console.log('Matched');
+        response.json(user);
+      } else {
+        console.log('Password Did not Match');
+        response.status(400).send('UserName or password is incorrect');
+      }
+    }
+  });
+});
+
 /*1. METHOD TO REGISTER A CONTACT(USER)*/
 router.post('/registerContact', function (req, res) {
   console.log('Registering a Contact');
@@ -18,7 +47,8 @@ router.post('/registerContact', function (req, res) {
   newContact.firstName = req.body.firstName;
   newContact.lastName = req.body.lastName;
   newContact.userName = req.body.userName;
-  newContact.password = req.body.password;
+  //newContact.password = req.body.password;
+  newContact.password = newContact.generateHash(req.body.password);
   newContact.phoneNo = req.body.phoneNo;
   newContact.emailId = req.body.emailId;
   newContact.addressLine1 = req.body.address.addressLine1;
@@ -27,7 +57,6 @@ router.post('/registerContact', function (req, res) {
   newContact.state = req.body.address.state;
   newContact.pincode = req.body.address.pincode;
   newContact.role = req.body.role;
-
   getContacts.find({
     'firstName': req.body.firstName,
     'lastName': req.body.lastName
@@ -110,7 +139,7 @@ router.put('/contact/:id', function (req, res) {
         phoneNo: req.body.phoneNo,
         emailId: req.body.emailId,
         addressLine1: req.body.addressLine1,
-        addressLine1: req.body.addressLine2,
+        addressLine2: req.body.addressLine2,
         city: req.body.city,
         state: req.body.state,
         pincode: req.body.pincode,

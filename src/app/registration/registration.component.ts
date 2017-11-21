@@ -12,12 +12,14 @@ import { AlertService } from '../services/alert/alert.service';
 })
 export class RegistrationComponent implements OnInit {
   contacts: Contact = new Contact();
-  userRole: string = 'User';
+  userRole: string;
   registrationForm: FormGroup;
   constructor(private fb: FormBuilder, private registerService: RegistrationService, private alertService: AlertService,
     private router: Router) { }
 
   ngOnInit() {
+    this.contacts.role = 'User';
+    this.userRole = this.contacts.role;
     this.registrationForm = this.fb.group({
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
@@ -25,6 +27,7 @@ export class RegistrationComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       phoneNo: new FormControl('', [Validators.required]),
       emailId: new FormControl('', [Validators.required]),
+      role: new FormControl(''),
       address: this.fb.group({
         addressLine1: new FormControl('', [Validators.required]),
         addressLine2: new FormControl('', []),

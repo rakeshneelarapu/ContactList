@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertService } from '../services/alert/alert.service';
 import { LoginService } from '../services/login/login.service';
 import { Contact } from '../contact';
+import { error } from 'util';
 
 @Component({
   selector: 'app-home',
@@ -19,11 +20,15 @@ export class HomeComponent implements OnInit {
 
   login() {
     this.loading = true;
-    if (this.loginService.login(this.contact)) {
-      this.router.navigate(['/contacts']);
-    } else {
-      this.alertService.error('UserName or password is incorrect');
-      this.loading = false;
-    }
+    this.loginService.login(this.contact)
+      .subscribe(
+      data => {
+        this.router.navigate(['/contacts']);
+      },
+      error => {
+        console.log(error);
+        this.alertService.error(error);
+        this.loading = false;
+      });
   }
-}
+};

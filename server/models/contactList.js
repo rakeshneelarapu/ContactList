@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
 const contactSchema = new Schema({
   firstName: String,
   lastName: String,
@@ -14,5 +15,15 @@ const contactSchema = new Schema({
   pincode: String,
   role: String,
 });
+
+//HASH THE PASSWORD
+contactSchema.methods.generateHash = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+contactSchema.methods.validPassword = function(password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 module.exports = mongoose.model('contact', contactSchema, 'contactList');
