@@ -12,6 +12,13 @@ mongoose.connect(db, (err) => {
   }
 });
 
+// router.post('/authenticate', authenticate);
+// router.post('/registerContact', register);
+// router.get('/', getAll);
+// router.get('/current', getCurrent);
+// router.put('/:_id', update);
+// router.delete('/:_id', _delete);
+
 /*0. METHOD TO AUTHENTICATE THE USER */
 router.post('/authenticate', function (req, response) {
   getContacts.findOne({
