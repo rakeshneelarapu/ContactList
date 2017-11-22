@@ -13,6 +13,7 @@ import { error } from 'util';
 export class HomeComponent implements OnInit {
   contact: Contact = new Contact();
   loading: boolean = false;
+  loggedInUser: string;
   constructor(private loginService: LoginService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
@@ -22,7 +23,10 @@ export class HomeComponent implements OnInit {
     this.loading = true;
     this.loginService.login(this.contact)
       .subscribe(
-      data => {
+      response => {
+        console.log(response);
+        // let loggedInUser = response.userName;
+        // let userRole = response.role;
         this.router.navigate(['/contacts']);
       },
       error => {

@@ -30,7 +30,7 @@ router.post('/authenticate', function (req, response) {
     if (!req.body.role === 'admin') {
       if (!user.validPassword(req.body.password)) {
         console.log('Password Did not Match');
-        response.status(400).send('UserName or password is incorrect');
+        response.status(400).json('UserName or password is incorrect');
       } else {
         console.log('Password Matched');
         response.json(user);
@@ -41,7 +41,7 @@ router.post('/authenticate', function (req, response) {
         response.json(user);
       } else {
         console.log('Password Did not Match');
-        response.status(400).send('UserName or password is incorrect');
+        response.status(400).json('UserName or password is incorrect');
       }
     }
   });
