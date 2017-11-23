@@ -23,6 +23,7 @@ contactSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 contactSchema.methods.validPassword = function(password) {
+  console.log(password);
   return bcrypt.compareSync(password, this.password);
 };
 

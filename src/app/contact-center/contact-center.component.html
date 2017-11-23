@@ -12,7 +12,7 @@
 
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li> <a>Welcome {{loggedInUser}}</a></li>
+          <li> <a>Welcome {{loginuser}}</a></li>
           <li><a routerLink='/home'>Logout</a></li>
         </ul>
     </div>
@@ -21,7 +21,7 @@
 </div>
 <div class="row">
   <div class="col-sm-3">
-    <button (click)="newContact()" class="btn btn-success btn-block" type="button">Add Contact</button>
+    <button *ngIf='isAdmin' (click)="newContact()" class="btn btn-success btn-block" type="button">Add Contact</button>
     <contact-list [contacts]="contacts" (SelectContact)="onSelectContact($event)"></contact-list>
   </div>
   <div class="col-sm-9">

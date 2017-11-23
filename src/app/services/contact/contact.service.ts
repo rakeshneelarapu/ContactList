@@ -7,6 +7,7 @@ import { Contact } from 'app/contact';
 @Injectable()
 export class ContactService {
   private _getUrl = '/api/contacts';
+  private _getContactUrl = '/api/contacts/';
   private _postUrl = '/api/contact';
   private _putUrl = '/api/contact/';
   private _deleteUrl = '/api/contact/';
@@ -15,6 +16,11 @@ export class ContactService {
 
   getContacts() {
     return this.http.get(this._getUrl)
+      .map((response: Response) => response.json());
+  }
+
+  getContact(contact: Contact) {
+    return this.http.get(this._getContactUrl + contact._id)
       .map((response: Response) => response.json());
   }
 

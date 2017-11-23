@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Contact } from '../contact';
 import { ContactService } from '../services/contact/contact.service';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-contact-center',
@@ -11,12 +11,23 @@ import { ContactService } from '../services/contact/contact.service';
 export class ContactCenterComponent implements OnInit {
   contacts: Array<Contact>;
   selectedContact: Contact;
+  loginuser: string;
   private hideContact: boolean = true;
-  constructor(private contactService: ContactService) { }
+  private isAdmin: boolean = false;
+  constructor(private contactService: ContactService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.contactService.getContacts()
-      .subscribe(resContactData => this.contacts = resContactData);
+    let getUsername = JSON.parse(localStorage.getItem('currentUser'));
+    this.loginuser = getUsername.firstName;
+    if (getUsername.role === 'admin') {
+      this.isAdmin = true;
+      this.contactService.getContacts()
+        .subscribe(resContactsData => this.contacts = resContactsData);
+    } else {
+      this.isAdmin = false;
+      this.contactService.getContact(getUsername)
+        .subscribe(resContactData => this.contacts = Array.of(resContactData));
+    }
   }
 
   onSelectContact(contact: any) {

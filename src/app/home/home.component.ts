@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
+    this.loginService.logout();
   }
 
   login() {
@@ -25,8 +26,7 @@ export class HomeComponent implements OnInit {
       .subscribe(
       response => {
         console.log(response);
-        // let loggedInUser = response.userName;
-        // let userRole = response.role;
+        this.loggedInUser = response.userName;
         this.router.navigate(['/contacts']);
       },
       error => {
