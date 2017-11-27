@@ -12,22 +12,17 @@ mongoose.connect(db, (err) => {
   }
 });
 
-// router.post('/authenticate', authenticate);
-// router.post('/registerContact', register);
-// router.get('/', getAll);
-// router.get('/current', getCurrent);
-// router.put('/:_id', update);
-// router.delete('/:_id', _delete);
-
 /*0. METHOD TO AUTHENTICATE THE USER */
 router.post('/authenticate', function (req, response) {
+  console.log(req.body.userName);
   getContacts.findOne({
     userName: req.body.userName
   }, function (err, user) {
     if (err) {
       console.log(err);
     }
-    if (!req.body.role === 'admin') {
+    console.log(req.body.role);
+    if (user.role !== 'admin') {
       if (!user.validPassword(req.body.password)) {
         console.log('Password Did not Match');
         response.status(400).json('UserName or password is incorrect');
@@ -36,6 +31,8 @@ router.post('/authenticate', function (req, response) {
         response.json(user);
       }
     } else {
+      console.log('in admin');
+      console.log(user.password);
       if (user.password === req.body.password) {
         console.log('Matched');
         response.json(user);
@@ -54,7 +51,6 @@ router.post('/registerContact', function (req, res) {
   newContact.firstName = req.body.firstName;
   newContact.lastName = req.body.lastName;
   newContact.userName = req.body.userName;
-  //newContact.password = req.body.password;
   newContact.password = newContact.generateHash(req.body.password);
   newContact.phoneNo = req.body.phoneNo;
   newContact.emailId = req.body.emailId;
@@ -81,10 +77,81 @@ router.post('/registerContact', function (req, res) {
         });
       } else {
         console.log("User Already exists");
-        // alert("User Already exists");
       }
     }
   });
+});
+
+router.put('/updatePassword/:id', function (req, res) {
+  const userid = req.params.id;
+  const oldpassword = req.body.oldpassword;
+  const password = req.body.password;
+  if (!oldpassword || !password || !userid) {
+    return res.status(422).json({
+      success: false,
+      message: 'Posted data is not correct or incompleted.'
+    });
+  } else {
+    // console.log('in else');
+    getContacts.findOne({
+      _id: userid
+    }, function (err, user) {
+      if (err) {
+        res.status(400).json({
+          success: false,
+          message: 'Error processing request ' + err
+        });
+      }
+      if (user) {
+        if (user.role === 'admin') {
+          if (oldpassword !== password) {
+            user.password = password;
+            user.save(function (err) {
+              if (err) {
+                res.status(400).json({
+                  success: false,
+                  message: 'Error processing request ' + err
+                });
+              }
+              res.status(201).json({
+                success: true,
+                message: 'Password updated successfully'
+              });
+            });
+          } else {
+            res.status(201).json({
+              success: false,
+              message: 'Incorrect old password.'
+            });
+          }
+        } else {
+          user.comparePassword(oldpassword, function (err, isMatch) {
+            if (isMatch && !err) {
+              //user.password = password;
+              user.password = getContacts().generateHash(password);
+              user.save(function (err) {
+                if (err) {
+                  res.status(400).json({
+                    success: false,
+                    message: 'Error processing request ' + err
+                  });
+                }
+                res.status(201).json({
+                  success: true,
+                  message: 'Password updated successfully'
+                });
+              });
+            } else {
+              res.status(201).json({
+                success: false,
+                message: 'Incorrect old password.'
+              });
+            }
+          });
+        }
+      }
+    });
+  }
 });
 
 /*2. METHOD TO GET ALL CONTACTS*/

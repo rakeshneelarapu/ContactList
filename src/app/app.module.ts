@@ -15,6 +15,7 @@ import { RegistrationService } from './services/registration/registration.servic
 import { AlertService } from './services/alert/alert.service';
 import { AlertComponent } from './alert/alert.component';
 import { LoginService } from './services/login/login.service';
+import { PasswordComponent } from './password/password.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LoginService } from './services/login/login.service';
     RegistrationComponent,
     ContactCenterComponent,
     ContactDetailComponent,
-    AlertComponent
+    AlertComponent,
+    PasswordComponent
   ],
   imports: [
     BrowserModule,

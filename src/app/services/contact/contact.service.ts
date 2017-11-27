@@ -11,6 +11,7 @@ export class ContactService {
   private _postUrl = '/api/contact';
   private _putUrl = '/api/contact/';
   private _deleteUrl = '/api/contact/';
+  private _updatePassword = '/api/updatePassword/';
 
   constructor(private http: Http) { }
 
@@ -40,6 +41,16 @@ export class ContactService {
 
   deleteContact(contact: Contact) {
     return this.http.delete(this._deleteUrl + contact._id)
+      .map((response: Response) => response.json());
+  }
+
+  updatePassword(contact, oUser) {
+    console.log('1');
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    // headers.append('Authorization', `${this.jwtToken}`);
+    let options = new RequestOptions({ headers: headers });
+    return this.http.put(this._updatePassword + JSON.parse(contact)._id, JSON.stringify(oUser), options)
       .map((response: Response) => response.json());
   }
 }

@@ -9,9 +9,22 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class LoginService {
   isLoggedin: boolean = false;
+  public currentUser: Contact;
   private _postUrl = '/api/authenticate';
   constructor(private _http: Http) { }
 
+  isLoggedIn(): boolean {
+    try {
+      const theUser: any = JSON.parse(localStorage.getItem('currentUser'));
+      if (theUser) {
+        this.currentUser = theUser.user;
+      }
+    } catch (e) {
+      return false;
+    }
+
+    return !!this.currentUser;
+  }
   login(contact: Contact) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
